@@ -1,5 +1,11 @@
 import { ROUTES } from "@/constants/routes";
 import { BreadcrumbItem } from "@/types/common";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const createArticleBreadcrumbs = (title: string): BreadcrumbItem[] => {
   return [
