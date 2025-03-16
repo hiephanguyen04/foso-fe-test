@@ -1,103 +1,90 @@
+"use client";
+
+import ArticleList from "@/components/blog/ArticleList";
+import BlogHeader from "@/components/blog/BlogHeader";
+import SidebarCategories from "@/components/blog/SidebarCategories";
+import SidebarSupport from "@/components/blog/SidebarSupport";
+import Pagination from "@/components/common/Pagination";
+import SearchBar from "@/components/common/SearchBar";
+import Sidebar from "@/components/layout/Sidebar";
+import { BLOG_CONFIG } from "@/constants/config";
+import { ROUTES } from "@/constants/routes";
+import { articles } from "@/data/articles";
+import { categories } from "@/data/categories";
+import { SidebarSection } from "@/types/common";
+
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+export default function BlogPage() {
+  const regularArticles = articles.slice(0, BLOG_CONFIG.postsPerPage);
+  const breadcrumbItems = [
+    { ...ROUTES.HOME },
+    { ...ROUTES.RESOURCE },
+    { ...ROUTES.BLOG, isActive: true },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSearch = (query: string) => {
+    console.log("Searching for:", query);
+    // Implement search logic here
+  };
+
+  const sidebarSections: SidebarSection[] = [
+    {
+      title: "search",
+      content: <SearchBar onSearch={handleSearch} label="Tìm kiếm" />,
+    },
+    {
+      title: "Categories",
+      content: <SidebarCategories categories={categories} />,
+    },
+    {
+      title: "Support",
+      content: <SidebarSupport />,
+    },
+  ];
+
+  return (
+    <div className="container mx-auto px-4 py-4 md:py-8">
+      <BlogHeader
+        breadcrumbItems={breadcrumbItems}
+        title="Blog FOSO -"
+        subtitle="Cập Nhật Tin Tức Mới Nhất"
+        description="Blog FOSO luôn cập nhật thông tin mới nhất về sản phẩm và xu hướng quản lý sản xuất"
+      />
+
+      <div className="flex flex-col lg:flex-row gap-8 mt-7 md:mt-15">
+        <div className="w-full lg:w-3/4">
+          <div className="mb-8">
+            <h3 className="text-black text-4xl font-extrabold mb-6">
+              Tất cả bài viết
+            </h3>
+            <div className="relative w-full aspect-[3.3/1] overflow-hidden rounded-lg">
+              <Image
+                src="/images/banner.png"
+                alt="Banner blog FOSO"
+                fill
+                sizes="(max-width: 768px) 100vw, 75vw"
+                priority
+                className="object-cover"
+              />
+            </div>
+          </div>
+
+          <ArticleList articles={regularArticles} />
+
+          <Pagination
+            currentPage={1}
+            totalPages={10}
+            basePath="/blog"
+            className="mt-10"
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <Sidebar
+          className="hidden lg:block lg:w-1/4"
+          sections={sidebarSections}
+        />
+      </div>
     </div>
   );
 }
